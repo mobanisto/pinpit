@@ -1,0 +1,12 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven { url = 'https://mvn.topobyte.de' }
+    }
+    plugins {
+        def versionAccessVersion = getProperty("version.access.version")
+        id 'de.topobyte.version-access-gradle-plugin' version versionAccessVersion
+    }
+}
+
+rootProject.name = pName
