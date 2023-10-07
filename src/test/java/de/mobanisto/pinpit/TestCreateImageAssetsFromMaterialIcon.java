@@ -6,6 +6,7 @@ import java.nio.file.Path;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.batik.transcoder.TranscoderException;
 import org.apache.commons.io.file.PathUtils;
 import org.xml.sax.SAXException;
 
@@ -15,8 +16,8 @@ import de.topobyte.system.utils.SystemPaths;
 public class TestCreateImageAssetsFromMaterialIcon
 {
 
-	public static void main(String[] args)
-			throws IOException, ParserConfigurationException, SAXException
+	public static void main(String[] args) throws IOException,
+			ParserConfigurationException, SAXException, TranscoderException
 	{
 		Path cwd = SystemPaths.CWD;
 		Path input = cwd.resolve("src/test/resources/rocket.svg");

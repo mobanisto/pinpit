@@ -4,13 +4,20 @@ import static de.mobanisto.pinpit.util.NullUtil.nullDefault;
 import static de.topobyte.inkscape4j.Styles.color;
 import static de.topobyte.inkscape4j.Styles.style;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.batik.transcoder.TranscoderException;
 import org.locationtech.jts.geom.util.AffineTransformation;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -18,6 +25,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import de.mobanisto.pinpit.util.BatikUtil;
 import de.topobyte.chromaticity.ColorCode;
 import de.topobyte.inkscape4j.Group;
 import de.topobyte.inkscape4j.Layer;
@@ -45,13 +53,15 @@ public class CreateImageAssetsFromMaterialIcon
 	{
 		this.input = input;
 		this.output = output;
-		this.colorIconBackground = nullDefault(colorIconBackground, color(0x127f73));
-		this.colorIconForeground = nullDefault(colorIconForeground, color(0xffffff));
+		this.colorIconBackground = nullDefault(colorIconBackground,
+				color(0x127f73));
+		this.colorIconForeground = nullDefault(colorIconForeground,
+				color(0xffffff));
 		this.colorDialog = nullDefault(colorDialog, color(0xffe680));
 	}
 
-	public void execute()
-			throws IOException, ParserConfigurationException, SAXException
+	public void execute() throws IOException, ParserConfigurationException,
+			SAXException, TranscoderException
 	{
 		System.out.println("Creating image assets from Material icon");
 		System.out.println("input: " + input);
@@ -86,6 +96,11 @@ public class CreateImageAssetsFromMaterialIcon
 		try (OutputStream os = Files.newOutputStream(pathWindowsDialog)) {
 			SvgFileWriting.write(svgWindowsDialog, os);
 		}
+
+		// Convert to raster images
+		convertToPng(pathIcon);
+		convertToBmp(pathWindowsBanner);
+		convertToBmp(pathWindowsDialog);
 	}
 
 	private SvgFile createIcon(String materialPath, int imageSize,
@@ -205,6 +220,43 @@ public class CreateImageAssetsFromMaterialIcon
 		Node item = paths.item(0);
 		Attr d = (Attr) item.getAttributes().getNamedItem("d");
 		return d.getValue();
+	}
+
+	private void convertToPng(Path pathSvg)
+			throws IOException, TranscoderException
+	{
+		String filename = pathSvg.getFileName().toString();
+		String png = filename.substring(0, filename.length() - 4) + ".png";
+		Path pathPng = pathSvg.resolveSibling(png);
+		try (InputStream is = Files.newInputStream(pathSvg)) {
+			byte[] imageBytes = BatikUtil.convertSvgToPng(is);
+			Files.write(pathPng, imageBytes);
+		}
+	}
+
+	private void convertToBmp(Path pathSvg)
+			throws IOException, TranscoderException
+	{
+		String filename = pathSvg.getFileName().toString();
+		String bmp = filename.substring(0, filename.length() - 4) + ".bmp";
+		Path pathBmp = pathSvg.resolveSibling(bmp);
+		try (InputStream is = Files.newInputStream(pathSvg)) {
+			byte[] imageBytes = BatikUtil.convertSvgToPng(is);
+			BufferedImage image = ImageIO
+					.read(new ByteArrayInputStream(imageBytes));
+
+			// Convert to 24 bit image without alpha channel
+			BufferedImage rgb = new BufferedImage(image.getWidth(),
+					image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+
+			Graphics2D g2d = rgb.createGraphics();
+			g2d.setColor(Color.WHITE);
+			g2d.fillRect(0, 0, rgb.getWidth(), rgb.getHeight());
+			g2d.drawImage(image, 0, 0, null);
+			g2d.dispose();
+
+			ImageIO.write(rgb, "BMP", pathBmp.toFile());
+		}
 	}
 
 }
