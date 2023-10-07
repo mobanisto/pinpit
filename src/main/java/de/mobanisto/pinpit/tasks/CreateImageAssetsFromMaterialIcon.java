@@ -123,8 +123,6 @@ public class CreateImageAssetsFromMaterialIcon
 		icon.setTransform(new AffineTransformation().scale(scale, scale)
 				.translate(margin, iconSize + margin));
 
-		layerIcon.getObjects().add(icon);
-
 		StringPath pathRocket = new StringPath("material-icon",
 				FillRule.EVEN_ODD, materialPath);
 		pathRocket.setStyle(style(colorIconForeground, null, 1, 1, 1, 2));
