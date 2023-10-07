@@ -1,5 +1,6 @@
 package de.mobanisto.pinpit.tasks;
 
+import static de.mobanisto.pinpit.util.NullUtil.nullDefault;
 import static de.topobyte.inkscape4j.Styles.color;
 import static de.topobyte.inkscape4j.Styles.style;
 
@@ -34,11 +35,19 @@ public class CreateImageAssetsFromMaterialIcon
 
 	private Path input;
 	private Path output;
+	private ColorCode colorIconBackground;
+	private ColorCode colorIconForeground;
+	private ColorCode colorDialog;
 
-	public CreateImageAssetsFromMaterialIcon(Path input, Path output)
+	public CreateImageAssetsFromMaterialIcon(Path input, Path output,
+			ColorCode colorIconBackground, ColorCode colorIconForeground,
+			ColorCode colorDialog)
 	{
 		this.input = input;
 		this.output = output;
+		this.colorIconBackground = nullDefault(colorIconBackground, color(0x127f73));
+		this.colorIconForeground = nullDefault(colorIconForeground, color(0xffffff));
+		this.colorDialog = nullDefault(colorDialog, color(0xffe680));
 	}
 
 	public void execute()
@@ -49,9 +58,6 @@ public class CreateImageAssetsFromMaterialIcon
 		System.out.println("output: " + output);
 
 		int iconSize = 100;
-		ColorCode colorIconBackground = color(0x127f73);
-		ColorCode colorIconForeground = color(0xffffff);
-		ColorCode colorDialog = color(0xffe680);
 
 		Path pathIcon = output.resolve("icon.svg");
 		Path pathWindowsBanner = output.resolve("banner.svg");
