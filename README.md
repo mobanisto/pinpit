@@ -5,11 +5,20 @@ This tool can be used for setting up projects that use the
 
 ## Usage
 
+The `create-image-assets` tool can be used for creating all the images assets
+required for packaging a desktop application. It creates the assets from a
+Material icon specified as input. The logo contains a rounded rectangle in a
+background color and the icon on top with the foreground color.
+
+Call the tool like this:
+
 ```
-./scripts/pinpit create-image-assets --input src/test/resources/rocket.svg --output test --color-foreground lime
+./scripts/pinpit create-image-assets \
+    --input src/test/resources/rocket.svg --output test \
+    --color-foreground lime
 ```
 
-This is the help message displayed by that tool:
+This is the detailed help message of the tool:
 
 ```
 usage: pinpit create-image-assets [options]
