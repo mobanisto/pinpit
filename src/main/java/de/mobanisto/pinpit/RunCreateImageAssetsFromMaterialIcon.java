@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 
 import com.google.common.base.Joiner;
@@ -67,13 +68,20 @@ public class RunCreateImageAssetsFromMaterialIcon
 
 			String nl = System.getProperty("line.separator");
 
-			StringBuilder strb = new StringBuilder();
-			strb.append("[options]");
-			strb.append(nl + nl);
-			strb.append(colorHelpMessage);
-			strb.append(nl + nl);
+			return new CommonsCliExeOptions(options, "[options]") {
 
-			return new CommonsCliExeOptions(options, strb.toString());
+				@Override
+				public void usage(String name)
+				{
+					String syntax = name + " " + getUsageSuffix();
+					HelpFormatter formatter = new HelpFormatter();
+					// sort options by order of definition
+					formatter.setOptionComparator(null);
+					formatter.printHelp(syntax, null, options,
+							nl + colorHelpMessage);
+				}
+
+			};
 		}
 
 	};
