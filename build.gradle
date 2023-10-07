@@ -34,6 +34,10 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
+    implementation 'de.topobyte:commons-cli-helper:0.1.0'
+    implementation 'de.topobyte:inkscape4j-writer:0.2.0'
+    testImplementation 'de.topobyte:system-utils:0.0.1'
+    testImplementation 'commons-io:commons-io:2.14.0'
 }
 
 task copyJars(type: Copy) {
