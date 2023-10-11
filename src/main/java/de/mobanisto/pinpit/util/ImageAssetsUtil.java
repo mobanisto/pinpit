@@ -104,10 +104,16 @@ public class ImageAssetsUtil
 			byte[] imageBytes = BatikUtil.convertSvgToPng(is);
 			Files.write(pathPng, imageBytes);
 		}
+	}
+
+	public static void convertToIco(Path pathSvg)
+			throws IOException, TranscoderException
+	{
+		String filename = pathSvg.getFileName().toString();
+		String basename = filename.substring(0, filename.length() - 4);
 
 		List<BufferedImage> images = new ArrayList<>();
 		for (int size : new int[] { 16, 32, 48, 256 }) {
-			pathPng = pathSvg.resolveSibling(basename + "-" + size + ".png");
 			try (InputStream is = Files.newInputStream(pathSvg)) {
 				byte[] imageBytes = BatikUtil.convertSvgToPng(is, (float) size,
 						(float) size);

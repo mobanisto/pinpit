@@ -77,6 +77,7 @@ public abstract class AbstractCreateImageAssets
 
 		// Convert to raster images
 		ImageAssetsUtil.convertToPng(pathIcon);
+		ImageAssetsUtil.convertToIco(pathIcon);
 		ImageAssetsUtil.convertToBmp(pathWindowsBanner);
 		ImageAssetsUtil.convertToBmp(pathWindowsDialog);
 	}
