@@ -95,11 +95,21 @@ public class ImageAssetsUtil
 			throws IOException, TranscoderException
 	{
 		String filename = pathSvg.getFileName().toString();
-		String png = filename.substring(0, filename.length() - 4) + ".png";
-		Path pathPng = pathSvg.resolveSibling(png);
+		String basename = filename.substring(0, filename.length() - 4);
+
+		Path pathPng = pathSvg.resolveSibling(basename + ".png");
 		try (InputStream is = Files.newInputStream(pathSvg)) {
 			byte[] imageBytes = BatikUtil.convertSvgToPng(is);
 			Files.write(pathPng, imageBytes);
+		}
+
+		for (int size : new int[] { 16, 32, 48, 256 }) {
+			pathPng = pathSvg.resolveSibling(basename + "-" + size + ".png");
+			try (InputStream is = Files.newInputStream(pathSvg)) {
+				byte[] imageBytes = BatikUtil.convertSvgToPng(is, (float) size,
+						(float) size);
+				Files.write(pathPng, imageBytes);
+			}
 		}
 	}
 
