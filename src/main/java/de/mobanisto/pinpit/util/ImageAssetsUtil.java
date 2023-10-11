@@ -2,8 +2,6 @@ package de.mobanisto.pinpit.util;
 
 import static de.topobyte.inkscape4j.Styles.style;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -17,6 +15,7 @@ import org.apache.batik.transcoder.TranscoderException;
 import org.locationtech.jts.geom.util.AffineTransformation;
 import org.w3c.dom.Document;
 
+import de.topobyte.bmp4j.codec.BMPEncoder;
 import de.topobyte.chromaticity.ColorCode;
 import de.topobyte.inkscape4j.Group;
 import de.topobyte.inkscape4j.Layer;
@@ -123,18 +122,7 @@ public class ImageAssetsUtil
 			byte[] imageBytes = BatikUtil.convertSvgToPng(is);
 			BufferedImage image = ImageIO
 					.read(new ByteArrayInputStream(imageBytes));
-
-			// Convert to 24 bit image without alpha channel
-			BufferedImage rgb = new BufferedImage(image.getWidth(),
-					image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-
-			Graphics2D g2d = rgb.createGraphics();
-			g2d.setColor(Color.WHITE);
-			g2d.fillRect(0, 0, rgb.getWidth(), rgb.getHeight());
-			g2d.drawImage(image, 0, 0, null);
-			g2d.dispose();
-
-			ImageIO.write(rgb, "BMP", pathBmp.toFile());
+			BMPEncoder.write(image, pathBmp.toFile());
 		}
 	}
 
