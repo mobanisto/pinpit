@@ -6,16 +6,23 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
 import org.apache.batik.transcoder.TranscoderException;
 import org.locationtech.jts.geom.util.AffineTransformation;
 import org.w3c.dom.Document;
+
+import com.github.gino0631.icns.IcnsBuilder;
+import com.github.gino0631.icns.IcnsIcons;
+import com.github.gino0631.icns.IcnsType;
 
 import de.topobyte.bmp4j.codec.BMPEncoder;
 import de.topobyte.chromaticity.ColorCode;
@@ -137,6 +144,54 @@ public class ImageAssetsUtil
 			BufferedImage image = ImageIO
 					.read(new ByteArrayInputStream(imageBytes));
 			BMPEncoder.write(image, pathBmp.toFile());
+		}
+	}
+
+	public static void convertToIcns(Path pathSvg)
+			throws IOException, TranscoderException
+	{
+		String filename = pathSvg.getFileName().toString();
+		String basename = filename.substring(0, filename.length() - 4);
+
+		Path pathIcns = pathSvg.resolveSibling(basename + ".icns");
+
+		Map<Integer, byte[]> images = new HashMap<>();
+
+		for (int size : new int[] { 16, 32, 64, 128, 256, 512, 1024 }) {
+			try (InputStream is = Files.newInputStream(pathSvg)) {
+				byte[] imageBytes = BatikUtil.convertSvgToPng(is, (float) size,
+						(float) size);
+				images.put(size, imageBytes);
+			}
+		}
+
+		try (IcnsBuilder builder = IcnsBuilder.getInstance()) {
+			builder.add(IcnsType.ICNS_16x16_JPEG_PNG_IMAGE,
+					new ByteArrayInputStream(images.get(16)));
+			builder.add(IcnsType.ICNS_16x16_2X_JPEG_PNG_IMAGE,
+					new ByteArrayInputStream(images.get(32)));
+			builder.add(IcnsType.ICNS_32x32_JPEG_PNG_IMAGE,
+					new ByteArrayInputStream(images.get(32)));
+			builder.add(IcnsType.ICNS_32x32_2X_JPEG_PNG_IMAGE,
+					new ByteArrayInputStream(images.get(64)));
+			builder.add(IcnsType.ICNS_128x128_JPEG_PNG_IMAGE,
+					new ByteArrayInputStream(images.get(128)));
+			builder.add(IcnsType.ICNS_128x128_2X_JPEG_PNG_IMAGE,
+					new ByteArrayInputStream(images.get(256)));
+			builder.add(IcnsType.ICNS_256x256_JPEG_PNG_IMAGE,
+					new ByteArrayInputStream(images.get(256)));
+			builder.add(IcnsType.ICNS_256x256_2X_JPEG_PNG_IMAGE,
+					new ByteArrayInputStream(images.get(512)));
+			builder.add(IcnsType.ICNS_512x512_JPEG_PNG_IMAGE,
+					new ByteArrayInputStream(images.get(512)));
+			builder.add(IcnsType.ICNS_1024x1024_2X_JPEG_PNG_IMAGE,
+					new ByteArrayInputStream(images.get(1024)));
+
+			try (IcnsIcons builtIcons = builder.build()) {
+				try (OutputStream os = Files.newOutputStream(pathIcns)) {
+					builtIcons.writeTo(os);
+				}
+			}
 		}
 	}
 

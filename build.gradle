@@ -41,6 +41,7 @@ dependencies {
     implementation 'org.apache.xmlgraphics:batik-rasterizer:1.17'
     implementation 'de.topobyte:bmp4j:0.1.0'
     implementation 'de.topobyte:ico4j:0.1.0'
+    implementation 'com.github.gino0631:icns-core:1.2'
     testImplementation 'de.topobyte:system-utils:0.0.1'
     testImplementation 'commons-io:commons-io:2.14.0'
 }
