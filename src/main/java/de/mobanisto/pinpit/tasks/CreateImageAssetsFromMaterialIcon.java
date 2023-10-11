@@ -214,7 +214,6 @@ public class CreateImageAssetsFromMaterialIcon
 	// Material icons only have a single path. We can just extract that
 	// and create a filled path from it.
 	private static String getPath(Document document)
-			throws ParserConfigurationException, SAXException, IOException
 	{
 		NodeList paths = document.getElementsByTagName("path");
 		Node item = paths.item(0);
