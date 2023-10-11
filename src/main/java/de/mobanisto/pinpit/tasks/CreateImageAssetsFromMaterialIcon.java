@@ -138,10 +138,10 @@ public class CreateImageAssetsFromMaterialIcon
 		icon.setTransform(new AffineTransformation().scale(scale, scale)
 				.translate(margin, iconSize + margin));
 
-		StringPath pathRocket = new StringPath("material-icon",
+		StringPath pathMaterialIcon = new StringPath("material-icon",
 				FillRule.EVEN_ODD, materialPath);
-		pathRocket.setStyle(style(colorIconForeground, null, 1, 1, 1, 2));
-		icon.getObjects().add(pathRocket);
+		pathMaterialIcon.setStyle(style(colorIconForeground, null, 1, 1, 1, 2));
+		icon.getObjects().add(pathMaterialIcon);
 		layerIcon.getObjects().add(icon);
 
 		return svgFile;
