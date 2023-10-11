@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -17,6 +19,7 @@ import org.w3c.dom.Document;
 
 import de.topobyte.bmp4j.codec.BMPEncoder;
 import de.topobyte.chromaticity.ColorCode;
+import de.topobyte.ico4j.codec.ICOEncoder;
 import de.topobyte.inkscape4j.Group;
 import de.topobyte.inkscape4j.Layer;
 import de.topobyte.inkscape4j.SvgFile;
@@ -102,14 +105,19 @@ public class ImageAssetsUtil
 			Files.write(pathPng, imageBytes);
 		}
 
+		List<BufferedImage> images = new ArrayList<>();
 		for (int size : new int[] { 16, 32, 48, 256 }) {
 			pathPng = pathSvg.resolveSibling(basename + "-" + size + ".png");
 			try (InputStream is = Files.newInputStream(pathSvg)) {
 				byte[] imageBytes = BatikUtil.convertSvgToPng(is, (float) size,
 						(float) size);
-				Files.write(pathPng, imageBytes);
+				images.add(ImageIO.read(new ByteArrayInputStream(imageBytes)));
 			}
 		}
+
+		Path pathIco = pathSvg.resolveSibling(basename + ".ico");
+		boolean[] compress = new boolean[] { false, false, false, true };
+		ICOEncoder.write(images, compress, pathIco.toFile());
 	}
 
 	public static void convertToBmp(Path pathSvg)
