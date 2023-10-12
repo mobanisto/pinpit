@@ -111,6 +111,7 @@ public class ImageAssetsUtil
 		Path pathPng = pathSvg.resolveSibling(basename + ".png");
 		try (InputStream is = Files.newInputStream(pathSvg)) {
 			byte[] imageBytes = BatikUtil.convertSvgToPng(is, size, size);
+			imageBytes = PngUtil.findOptimalEncoding(imageBytes);
 			Files.write(pathPng, imageBytes);
 		}
 	}
@@ -126,6 +127,7 @@ public class ImageAssetsUtil
 			try (InputStream is = Files.newInputStream(pathSvg)) {
 				byte[] imageBytes = BatikUtil.convertSvgToPng(is, (float) size,
 						(float) size);
+				imageBytes = PngUtil.findOptimalEncoding(imageBytes);
 				images.add(ImageIO.read(new ByteArrayInputStream(imageBytes)));
 			}
 		}
@@ -163,6 +165,7 @@ public class ImageAssetsUtil
 			try (InputStream is = Files.newInputStream(pathSvg)) {
 				byte[] imageBytes = BatikUtil.convertSvgToPng(is, (float) size,
 						(float) size);
+				imageBytes = PngUtil.findOptimalEncoding(imageBytes);
 				images.put(size, imageBytes);
 			}
 		}
