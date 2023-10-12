@@ -106,9 +106,11 @@ public class ImageAssetsUtil
 		String filename = pathSvg.getFileName().toString();
 		String basename = filename.substring(0, filename.length() - 4);
 
+		float size = 500;
+
 		Path pathPng = pathSvg.resolveSibling(basename + ".png");
 		try (InputStream is = Files.newInputStream(pathSvg)) {
-			byte[] imageBytes = BatikUtil.convertSvgToPng(is);
+			byte[] imageBytes = BatikUtil.convertSvgToPng(is, size, size);
 			Files.write(pathPng, imageBytes);
 		}
 	}
