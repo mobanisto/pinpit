@@ -19,9 +19,11 @@ public class CreateImageAssetsCircle extends AbstractCreateImageAssets
 {
 
 	public CreateImageAssetsCircle(Path output, ColorCode colorIconBackground,
-			ColorCode colorIconForeground, ColorCode colorDialog)
+			ColorCode colorIconForeground, ColorCode colorDialog,
+			double rectFraction, double symbolFraction)
 	{
-		super(output, colorIconBackground, colorIconForeground, colorDialog);
+		super(output, colorIconBackground, colorIconForeground, colorDialog,
+				rectFraction, symbolFraction);
 	}
 
 	@Override
@@ -33,11 +35,13 @@ public class CreateImageAssetsCircle extends AbstractCreateImageAssets
 	}
 
 	@Override
-	SvgFile createIcon(int imageSize, ColorCode colorIconBackground,
+	SvgFile createIcon(int imageSize, double rectFraction,
+			double symbolFraction, ColorCode colorIconBackground,
 			ColorCode colorIconForeground)
 	{
-		double rectSize = imageSize * 0.9;
-		double iconSize = imageSize * 0.5;
+		double rectSize = imageSize * rectFraction;
+		double symbolSize = imageSize * symbolFraction;
+		double marginRect = (imageSize - rectSize) / 2;
 
 		SvgFile svgFile = new SvgFile();
 		svgFile.setWidth(String.format("%dpx", imageSize));
@@ -55,7 +59,8 @@ public class CreateImageAssetsCircle extends AbstractCreateImageAssets
 		styleRect.setOpacity(1);
 		styleRect.setFillOpacity(1);
 
-		Rect rect = new Rect("rect-1", 5, 5, rectSize, rectSize);
+		Rect rect = new Rect("rect-1", marginRect, marginRect, rectSize,
+				rectSize);
 		rect.setRx(10);
 		rect.setRy(10);
 		rect.setStyle(styleRect);
@@ -68,7 +73,7 @@ public class CreateImageAssetsCircle extends AbstractCreateImageAssets
 		styleCircle.setStrokeWidth(5);
 
 		Circle circle = new Circle("circle-1", imageSize / 2f, imageSize / 2f,
-				iconSize / 2);
+				symbolSize / 2);
 		circle.setStyle(styleCircle);
 		layerIcon.getObjects().add(circle);
 

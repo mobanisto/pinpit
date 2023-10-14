@@ -28,7 +28,7 @@ public class TestCreateImageAssetsFromMaterialIcon
 		}
 
 		CreateImageAssetsFromMaterialIcon task = new CreateImageAssetsFromMaterialIcon(
-				input, output, null, null, null);
+				input, output, null, null, null, 0.9, 0.8);
 		task.execute();
 	}
 

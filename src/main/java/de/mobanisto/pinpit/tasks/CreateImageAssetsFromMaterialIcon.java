@@ -32,9 +32,10 @@ public class CreateImageAssetsFromMaterialIcon extends AbstractCreateImageAssets
 
 	public CreateImageAssetsFromMaterialIcon(Path input, Path output,
 			ColorCode colorIconBackground, ColorCode colorIconForeground,
-			ColorCode colorDialog)
+			ColorCode colorDialog, double rectFraction, double symbolFraction)
 	{
-		super(output, colorIconBackground, colorIconForeground, colorDialog);
+		super(output, colorIconBackground, colorIconForeground, colorDialog,
+				rectFraction, symbolFraction);
 		this.input = input;
 	}
 
@@ -47,8 +48,9 @@ public class CreateImageAssetsFromMaterialIcon extends AbstractCreateImageAssets
 	}
 
 	@Override
-	SvgFile createIcon(int imageSize, ColorCode colorIconBackground,
-			ColorCode colorIconForeground) throws IOException
+	SvgFile createIcon(int imageSize, double rectSize, double symbolSize,
+			ColorCode colorIconBackground, ColorCode colorIconForeground)
+			throws IOException
 	{
 		Document materialIcon;
 		try {
@@ -58,16 +60,18 @@ public class CreateImageAssetsFromMaterialIcon extends AbstractCreateImageAssets
 		}
 		String materialPath = getPath(materialIcon);
 
-		return createIcon(materialPath, imageSize, colorIconBackground,
-				colorIconForeground);
+		return createIcon(materialPath, imageSize, rectSize, symbolSize,
+				colorIconBackground, colorIconForeground);
 	}
 
-	SvgFile createIcon(String materialPath, int imageSize,
-			ColorCode colorIconBackground, ColorCode colorIconForeground)
+	SvgFile createIcon(String materialPath, int imageSize, double rectFraction,
+			double symbolFraction, ColorCode colorIconBackground,
+			ColorCode colorIconForeground)
 	{
-		double rectSize = imageSize * 0.9;
-		double iconSize = imageSize * 0.8;
-		double margin = (imageSize - iconSize) / 2;
+		double rectSize = imageSize * rectFraction;
+		double symbolSize = imageSize * symbolFraction;
+		double marginRect = (imageSize - rectSize) / 2;
+		double marginSymbol = (imageSize - symbolSize) / 2;
 
 		SvgFile svgFile = new SvgFile();
 		svgFile.setWidth(String.format("%dpx", imageSize));
@@ -85,7 +89,8 @@ public class CreateImageAssetsFromMaterialIcon extends AbstractCreateImageAssets
 		styleRect.setOpacity(1);
 		styleRect.setFillOpacity(1);
 
-		Rect rect = new Rect("rect-1", 5, 5, rectSize, rectSize);
+		Rect rect = new Rect("rect-1", marginRect, marginRect, rectSize,
+				rectSize);
 		rect.setRx(10);
 		rect.setRy(10);
 		rect.setStyle(styleRect);
@@ -93,9 +98,9 @@ public class CreateImageAssetsFromMaterialIcon extends AbstractCreateImageAssets
 
 		Group icon = new Group("icon");
 		// the Material icon is on a 960x960 stage
-		double scale = iconSize / 960.;
+		double scale = symbolSize / 960.;
 		icon.setTransform(new AffineTransformation().scale(scale, scale)
-				.translate(margin, iconSize + margin));
+				.translate(marginSymbol, symbolSize + marginSymbol));
 
 		StringPath pathMaterialIcon = new StringPath("material-icon",
 				FillRule.EVEN_ODD, materialPath);

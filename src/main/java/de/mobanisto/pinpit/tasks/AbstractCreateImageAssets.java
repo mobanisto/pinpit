@@ -27,9 +27,12 @@ public abstract class AbstractCreateImageAssets
 	protected ColorCode colorIconBackground;
 	protected ColorCode colorIconForeground;
 	protected ColorCode colorDialog;
+	protected double rectFraction;
+	protected double symbolFraction;
 
 	public AbstractCreateImageAssets(Path output, ColorCode colorIconBackground,
-			ColorCode colorIconForeground, ColorCode colorDialog)
+			ColorCode colorIconForeground, ColorCode colorDialog,
+			double rectFraction, double symbolFraction)
 	{
 		this.output = output;
 		this.colorIconBackground = nullDefault(colorIconBackground,
@@ -37,9 +40,12 @@ public abstract class AbstractCreateImageAssets
 		this.colorIconForeground = nullDefault(colorIconForeground,
 				color(0xffffff));
 		this.colorDialog = nullDefault(colorDialog, color(0xffe680));
+		this.rectFraction = rectFraction;
+		this.symbolFraction = symbolFraction;
 	}
 
-	abstract SvgFile createIcon(int imageSize, ColorCode colorIconBackground,
+	abstract SvgFile createIcon(int imageSize, double rectSize,
+			double symbolSize, ColorCode colorIconBackground,
 			ColorCode colorIconForeground) throws IOException;
 
 	public void execute() throws IOException, ParserConfigurationException,
@@ -54,8 +60,8 @@ public abstract class AbstractCreateImageAssets
 		Path pathWindowsDialog = output.resolve("dialog.svg");
 
 		Files.createDirectories(output);
-		SvgFile svgIcon = createIcon(iconSize, colorIconBackground,
-				colorIconForeground);
+		SvgFile svgIcon = createIcon(iconSize, rectFraction, symbolFraction,
+				colorIconBackground, colorIconForeground);
 
 		try (OutputStream os = Files.newOutputStream(pathIcon)) {
 			SvgFileWriting.write(svgIcon, os);

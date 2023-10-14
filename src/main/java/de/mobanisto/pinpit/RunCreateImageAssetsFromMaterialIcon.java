@@ -2,8 +2,10 @@ package de.mobanisto.pinpit;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -30,6 +32,11 @@ public class RunCreateImageAssetsFromMaterialIcon
 	private static final String OPTION_COLOR_BACKGROUND = "color-background";
 	private static final String OPTION_COLOR_FOREGROUND = "color-foreground";
 	private static final String OPTION_COLOR_DIALOG = "color-dialog";
+	private static final String OPTION_SIZE_RECT = "size-rect";
+	private static final String OPTION_SIZE_SYMBOL = "size-symbol";
+
+	private static final double DEFAULT_SIZE_RECT = 0.9;
+	private static final double DEFAULT_SIZE_SYMBOL = 0.8;
 
 	private static Map<String, ColorCode> webColors = new HashMap<>();
 	static {
@@ -57,6 +64,8 @@ public class RunCreateImageAssetsFromMaterialIcon
 		@Override
 		public ExeOptions createOptions()
 		{
+			NumberFormat nf = NumberFormat.getInstance(Locale.US);
+
 			Options options = new Options();
 			// @formatter:off
 			OptionHelper.addL(options, OPTION_INPUT, true, true, "file", "SVG input file");
@@ -64,6 +73,13 @@ public class RunCreateImageAssetsFromMaterialIcon
 			OptionHelper.addL(options, OPTION_COLOR_BACKGROUND, true, false, "color", "background color for the icon");
 			OptionHelper.addL(options, OPTION_COLOR_FOREGROUND, true, false, "color", "color for tinting the Material icon");
 			OptionHelper.addL(options, OPTION_COLOR_DIALOG, true, false, "color", "background used in the Windows installer dialog");
+			OptionHelper.addL(options, OPTION_COLOR_FOREGROUND, true, false, "color", "color for tinting the Material icon");
+			OptionHelper.addL(options, OPTION_SIZE_RECT, true, false, "double",
+					String.format("fraction of the image size for the rectangle (0..1), default: %s",
+							nf.format(DEFAULT_SIZE_RECT)));
+			OptionHelper.addL(options, OPTION_SIZE_SYMBOL, true, false, "double",
+					String.format("fraction of the image size for the symbol (0..1), default: %s",
+							nf.format(DEFAULT_SIZE_SYMBOL)));
 			// @formatter:on
 
 			String nl = System.getProperty("line.separator");
@@ -96,6 +112,17 @@ public class RunCreateImageAssetsFromMaterialIcon
 		ColorCode colorBackground = null;
 		ColorCode colorForeground = null;
 		ColorCode colorDialog = null;
+		double rectSize;
+		double symbolSize;
+		try {
+			rectSize = parseDouble(line.getOptionValue(OPTION_SIZE_RECT),
+					DEFAULT_SIZE_RECT);
+			symbolSize = parseDouble(line.getOptionValue(OPTION_SIZE_SYMBOL),
+					DEFAULT_SIZE_SYMBOL);
+		} catch (NumberFormatException e) {
+			System.exit(0);
+			return;
+		}
 		try {
 			colorBackground = color(
 					line.getOptionValue(OPTION_COLOR_BACKGROUND));
@@ -110,8 +137,17 @@ public class RunCreateImageAssetsFromMaterialIcon
 		}
 
 		CreateImageAssetsFromMaterialIcon task = new CreateImageAssetsFromMaterialIcon(
-				input, output, colorBackground, colorForeground, colorDialog);
+				input, output, colorBackground, colorForeground, colorDialog,
+				rectSize, symbolSize);
 		task.execute();
+	}
+
+	private static double parseDouble(String value, double defaultValue)
+	{
+		if (value == null) {
+			return defaultValue;
+		}
+		return Double.parseDouble(value);
 	}
 
 	private static ColorCode color(String value)
