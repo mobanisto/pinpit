@@ -17,7 +17,7 @@ public class RunPinpit
 		public ExeOptions createOptions()
 		{
 			DelegateExeOptions options = new DelegateExeOptions();
-			options.addCommand("create-image-assets",
+			options.addCommand("create-image-assets-from-material-icon",
 					RunCreateImageAssetsFromMaterialIcon.OPTIONS_FACTORY,
 					RunCreateImageAssetsFromMaterialIcon.class);
 
