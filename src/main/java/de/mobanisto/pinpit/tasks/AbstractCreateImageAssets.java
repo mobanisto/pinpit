@@ -55,7 +55,9 @@ public abstract class AbstractCreateImageAssets
 
 		int iconSize = 100;
 
-		Path pathIcon = output.resolve("icon.svg");
+		String basename = "icon";
+		Path pathIcon = output.resolve(basename + ".svg");
+		Path pathIconMacOs = output.resolve(basename + "-macos.svg");
 		Path pathWindowsBanner = output.resolve("banner.svg");
 		Path pathWindowsDialog = output.resolve("dialog.svg");
 
@@ -63,8 +65,27 @@ public abstract class AbstractCreateImageAssets
 		SvgFile svgIcon = createIcon(iconSize, rectFraction, symbolFraction,
 				colorIconBackground, colorIconForeground);
 
+		// For macOS, let the square occupy at most 0.8 of the icon's size.
+		// That is what
+		// https://developer.apple.com/design/human-interface-guidelines/icons
+		// describes (10% margin)
+		double maxFractionMac = 0.8;
+		double factor = 1;
+		if (rectFraction > maxFractionMac) {
+			factor = maxFractionMac / rectFraction;
+		}
+		double rectFractionMac = rectFraction * factor;
+		double symbolFractionMac = symbolFraction * factor;
+
+		SvgFile svgIconMacOs = createIcon(iconSize, rectFractionMac,
+				symbolFractionMac, colorIconBackground, colorIconForeground);
+
 		try (OutputStream os = Files.newOutputStream(pathIcon)) {
 			SvgFileWriting.write(svgIcon, os);
+		}
+
+		try (OutputStream os = Files.newOutputStream(pathIconMacOs)) {
+			SvgFileWriting.write(svgIconMacOs, os);
 		}
 
 		Document icon = XmlUtils.parseSvg(pathIcon);
@@ -85,7 +106,7 @@ public abstract class AbstractCreateImageAssets
 		ImageAssetsUtil.convertToPng(pathIcon, 192);
 		ImageAssetsUtil.convertToPng(pathIcon, 500);
 		ImageAssetsUtil.convertToIco(pathIcon);
-		ImageAssetsUtil.convertToIcns(pathIcon);
+		ImageAssetsUtil.convertToIcns(pathIconMacOs, basename);
 		ImageAssetsUtil.convertToBmp(pathWindowsBanner);
 		ImageAssetsUtil.convertToBmp(pathWindowsDialog);
 	}

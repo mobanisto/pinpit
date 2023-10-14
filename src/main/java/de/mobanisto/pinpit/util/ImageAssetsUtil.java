@@ -157,6 +157,12 @@ public class ImageAssetsUtil
 		String filename = pathSvg.getFileName().toString();
 		String basename = filename.substring(0, filename.length() - 4);
 
+		convertToIcns(pathSvg, basename);
+	}
+
+	public static void convertToIcns(Path pathSvg, String basename)
+			throws IOException, TranscoderException
+	{
 		Path pathIcns = pathSvg.resolveSibling(basename + ".icns");
 
 		Map<Integer, byte[]> images = new HashMap<>();
