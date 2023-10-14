@@ -100,17 +100,17 @@ public class ImageAssetsUtil
 		return svgFile;
 	}
 
-	public static void convertToPng(Path pathSvg)
+	public static void convertToPng(Path pathSvg, int size)
 			throws IOException, TranscoderException
 	{
 		String filename = pathSvg.getFileName().toString();
 		String basename = filename.substring(0, filename.length() - 4);
 
-		float size = 500;
-
-		Path pathPng = pathSvg.resolveSibling(basename + ".png");
+		Path pathPng = pathSvg
+				.resolveSibling(String.format("%s-%d.png", basename, size));
 		try (InputStream is = Files.newInputStream(pathSvg)) {
-			byte[] imageBytes = BatikUtil.convertSvgToPng(is, size, size);
+			byte[] imageBytes = BatikUtil.convertSvgToPng(is, (float) size,
+					(float) size);
 			imageBytes = PngUtil.findOptimalEncoding(imageBytes);
 			Files.write(pathPng, imageBytes);
 		}
