@@ -57,7 +57,7 @@ public class CreateImageAssetsOptions
 	{
 		NumberFormat nf = NumberFormat.getInstance(Locale.US);
 		// @formatter:off
-		OptionHelper.addL(options, OPTION_INPUT, true, true, "file", "SVG input file");
+		OptionHelper.addL(options, OPTION_INPUT, true, true, "file", "Material icon SVG input file");
 		OptionHelper.addL(options, OPTION_COLOR_BACKGROUND, true, false, "color", "background color for the icon");
 		OptionHelper.addL(options, OPTION_COLOR_FOREGROUND, true, false, "color", "color for tinting the Material icon");
 		OptionHelper.addL(options, OPTION_COLOR_DIALOG, true, false, "color", "background used in the Windows installer dialog");

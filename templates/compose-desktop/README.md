@@ -1,6 +1,4 @@
-# Pinpit template (Compose for Desktop)
-
-This is a template project created using pinpit.
+# Template Project
 
 To run the program, execute this:
 

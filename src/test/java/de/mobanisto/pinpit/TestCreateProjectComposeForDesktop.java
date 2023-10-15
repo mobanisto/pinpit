@@ -3,6 +3,7 @@ package de.mobanisto.pinpit;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 import org.apache.commons.io.file.PathUtils;
 
@@ -21,8 +22,12 @@ public class TestCreateProjectComposeForDesktop
 			PathUtils.delete(output);
 		}
 
+		PackageDefinition targetPackage = new PackageDefinition(
+				Arrays.asList("de", "mobanisto"));
+
 		CreateProjectComposeForDesktop task = new CreateProjectComposeForDesktop(
-				output);
+				output, targetPackage, "Yoyodyne Inc", "Yoyodyne",
+				Arrays.asList("Foo", "Bar"), "a fancy project");
 		task.execute();
 	}
 

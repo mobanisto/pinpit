@@ -80,7 +80,7 @@ pinpit.desktop {
             packageVersion = versionCode
             description = "Template Project - a template project"
             vendor = "Template Vendor"
-            copyright = "2023 Template Inc"
+            copyright = "2023 Template Vendor"
             licenseFile.set(project.file("src/main/packaging/LICENSE.txt"))
             modules("java.naming")
             linux {
@@ -115,7 +115,7 @@ pinpit.desktop {
                 upgradeUuid = "1889DD1C-CD5F-4B43-AC0E-880EC17D5593"
                 packageVersion = versionCode
                 iconFile.set(project.file("src/main/packaging/windows/icon.ico"))
-                aumid = "Example.Template.Project"
+                aumid = "Vendor.Template.Project"
                 msi {
                     arch = "x64"
                     bitmapBanner.set(project.file("src/main/packaging/windows/banner.bmp"))
