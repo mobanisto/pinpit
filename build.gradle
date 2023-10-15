@@ -35,7 +35,7 @@ targetCompatibility = 1.8
 
 dependencies {
     implementation 'de.topobyte:commons-cli-helper:0.1.0'
-    implementation 'de.topobyte:inkscape4j-writer:0.2.0'
+    implementation 'de.topobyte:inkscape4j-writer:0.2.1'
     implementation 'com.google.guava:guava:19.0'
     implementation 'org.apache.xmlgraphics:batik-transcoder:1.17'
     implementation 'org.apache.xmlgraphics:batik-rasterizer:1.17'
