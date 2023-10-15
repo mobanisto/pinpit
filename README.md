@@ -13,7 +13,7 @@ background color and the icon on top with the foreground color.
 Call the tool like this:
 
 ```
-./scripts/pinpit create-image-assets \
+./scripts/pinpit create-image-assets-from-material-icon \
     --input src/test/resources/rocket.svg --output test \
     --color-foreground lime
 ```
@@ -21,14 +21,18 @@ Call the tool like this:
 This is the detailed help message of the tool:
 
 ```
-usage: pinpit create-image-assets [options]
-    --input <file>               SVG input file
+usage: pinpit create-image-assets-from-material-icon [options]
     --output <directory>         output directory to store generated files
                                  in
+    --input <file>               SVG input file
     --color-background <color>   background color for the icon
     --color-foreground <color>   color for tinting the Material icon
     --color-dialog <color>       background used in the Windows installer
                                  dialog
+    --size-rect <double>         fraction of the image size for the
+                                 rectangle (0..1), default: 0.9
+    --size-symbol <double>       fraction of the image size for the symbol
+                                 (0..1), default: 0.8
 
 Colors can be specified using hex notation such as 0xaaff22 or by name as
 one of the web colors: white, silver, gray, black, red, maroon, yellow,
