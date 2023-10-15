@@ -1,9 +1,30 @@
 # Pinpit
 
-This tool can be used for setting up projects that use the
+This tool can be used for setting up and modifying projects that use the
 [Pinpit Gradle Plugin](https://github.com/mobanisto/pinpit-gradle-plugin).
 
+## Build
+
+Make sure to have a JDK 17 on your PATH. Then run:
+
+```
+./gradlew clean createRuntime
+```
+
 ## Usage
+
+The tool can be run like this:
+
+```
+./scripts/pinpit <command>
+```
+
+The following commands are available:
+
+* `create-image-assets-from-material-icon`
+* `create-project-compose-for-desktop`
+
+### Creating image assets
 
 The `create-image-assets-from-material-icon` tool can be used for creating
 all the images assets required for packaging a desktop application.
@@ -39,6 +60,8 @@ Colors can be specified using hex notation such as 0xaaff22 or by name as
 one of the web colors: white, silver, gray, black, red, maroon, yellow,
 olive, lime, green, aqua, teal, blue, navy, fuchsia, purple
 ```
+
+### Creating a Compose for Desktop project
 
 The `create-project-compose-for-desktop` tool can be used for creating
 a compose for desktop project that gives you a quick start for developing
