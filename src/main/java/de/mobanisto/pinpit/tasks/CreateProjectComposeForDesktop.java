@@ -93,6 +93,7 @@ public class CreateProjectComposeForDesktop
 		}
 
 		if (filename.endsWith(".bmp") || filename.endsWith(".png")
+				|| filename.endsWith(".ico") || filename.endsWith(".icns")
 				|| filename.endsWith(".jar")) {
 			copy(filePath, withoutPrefix);
 		} else if (isSourceFile) {
