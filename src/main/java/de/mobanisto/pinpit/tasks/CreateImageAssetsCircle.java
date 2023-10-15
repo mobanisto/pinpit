@@ -20,10 +20,10 @@ public class CreateImageAssetsCircle extends AbstractCreateImageAssets
 
 	public CreateImageAssetsCircle(Path output, ColorCode colorIconBackground,
 			ColorCode colorIconForeground, ColorCode colorDialog,
-			double rectFraction, double symbolFraction)
+			double rectFraction, double symbolFraction, OutputPaths outputPaths)
 	{
 		super(output, colorIconBackground, colorIconForeground, colorDialog,
-				rectFraction, symbolFraction);
+				rectFraction, symbolFraction, outputPaths);
 	}
 
 	@Override

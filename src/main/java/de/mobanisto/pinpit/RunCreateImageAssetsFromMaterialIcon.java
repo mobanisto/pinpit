@@ -75,7 +75,7 @@ public class RunCreateImageAssetsFromMaterialIcon
 		CreateImageAssetsFromMaterialIcon task = new CreateImageAssetsFromMaterialIcon(
 				config.getInput(), output, config.getColorBackground(),
 				config.getColorForeground(), config.getColorDialog(),
-				config.getRectSize(), config.getSymbolSize());
+				config.getRectSize(), config.getSymbolSize(), null);
 		task.execute();
 	}
 

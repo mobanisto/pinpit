@@ -32,10 +32,11 @@ public class CreateImageAssetsFromMaterialIcon extends AbstractCreateImageAssets
 
 	public CreateImageAssetsFromMaterialIcon(Path input, Path output,
 			ColorCode colorIconBackground, ColorCode colorIconForeground,
-			ColorCode colorDialog, double rectFraction, double symbolFraction)
+			ColorCode colorDialog, double rectFraction, double symbolFraction,
+			OutputPaths outputPaths)
 	{
 		super(output, colorIconBackground, colorIconForeground, colorDialog,
-				rectFraction, symbolFraction);
+				rectFraction, symbolFraction, outputPaths);
 		this.input = input;
 	}
 

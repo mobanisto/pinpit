@@ -27,7 +27,7 @@ public class TestCreateImageAssetsCircle
 		}
 
 		CreateImageAssetsCircle task = new CreateImageAssetsCircle(output, null,
-				null, null, 0.9, 0.5);
+				null, null, 0.9, 0.5, null);
 		task.execute();
 	}
 

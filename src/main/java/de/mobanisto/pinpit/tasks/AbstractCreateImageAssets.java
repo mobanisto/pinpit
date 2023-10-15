@@ -29,12 +29,38 @@ public abstract class AbstractCreateImageAssets
 	protected ColorCode colorDialog;
 	protected double rectFraction;
 	protected double symbolFraction;
+	protected OutputPaths outputPaths;
+
+	public static class OutputPaths
+	{
+
+		private Path mainPng;
+		private Path linuxPng;
+		private Path banner;
+		private Path dialog;
+		private Path ico;
+		private Path icns;
+
+		public OutputPaths(Path mainPng, Path linuxPng, Path banner,
+				Path dialog, Path ico, Path icns)
+		{
+			this.mainPng = mainPng;
+			this.linuxPng = linuxPng;
+			this.banner = banner;
+			this.dialog = dialog;
+			this.ico = ico;
+			this.icns = icns;
+		}
+
+	}
 
 	public AbstractCreateImageAssets(Path output, ColorCode colorIconBackground,
 			ColorCode colorIconForeground, ColorCode colorDialog,
-			double rectFraction, double symbolFraction)
+			double rectFraction, double symbolFraction, OutputPaths outputPaths)
 	{
 		this.output = output;
+		this.outputPaths = nullDefault(outputPaths,
+				new OutputPaths(null, null, null, null, null, null));
 		this.colorIconBackground = nullDefault(colorIconBackground,
 				color(0x127f73));
 		this.colorIconForeground = nullDefault(colorIconForeground,
@@ -103,12 +129,13 @@ public abstract class AbstractCreateImageAssets
 		}
 
 		// Convert to raster images
-		ImageAssetsUtil.convertToPng(pathIcon, 192);
-		ImageAssetsUtil.convertToPng(pathIcon, 500);
-		ImageAssetsUtil.convertToIco(pathIcon);
-		ImageAssetsUtil.convertToIcns(pathIconMacOs, basename);
-		ImageAssetsUtil.convertToBmp(pathWindowsBanner);
-		ImageAssetsUtil.convertToBmp(pathWindowsDialog);
+		ImageAssetsUtil.convertToPng(pathIcon, 192, outputPaths.mainPng);
+		ImageAssetsUtil.convertToPng(pathIcon, 500, outputPaths.linuxPng);
+		ImageAssetsUtil.convertToIco(pathIcon, outputPaths.ico);
+		ImageAssetsUtil.convertToIcns(pathIconMacOs, basename,
+				outputPaths.icns);
+		ImageAssetsUtil.convertToBmp(pathWindowsBanner, outputPaths.banner);
+		ImageAssetsUtil.convertToBmp(pathWindowsDialog, outputPaths.dialog);
 	}
 
 }

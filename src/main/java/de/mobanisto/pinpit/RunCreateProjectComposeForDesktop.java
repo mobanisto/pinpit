@@ -16,6 +16,7 @@ import org.xml.sax.SAXException;
 
 import com.google.common.base.Splitter;
 
+import de.mobanisto.pinpit.tasks.AbstractCreateImageAssets.OutputPaths;
 import de.mobanisto.pinpit.tasks.CreateImageAssetsFromMaterialIcon;
 import de.mobanisto.pinpit.tasks.CreateProjectComposeForDesktop;
 import de.mobanisto.pinpit.util.Keywords;
@@ -128,10 +129,19 @@ public class RunCreateProjectComposeForDesktop
 				projectDescription);
 		createProject.execute();
 
+		Path srcMain = output.resolve("desktop/src/main");
+		Path packaging = srcMain.resolve("packaging");
+
 		CreateImageAssetsFromMaterialIcon createAssets = new CreateImageAssetsFromMaterialIcon(
 				config.getInput(), output, config.getColorBackground(),
 				config.getColorForeground(), config.getColorDialog(),
-				config.getRectSize(), config.getSymbolSize());
+				config.getRectSize(), config.getSymbolSize(),
+				new OutputPaths(srcMain.resolve("resources/icon.png"),
+						packaging.resolve("linux/icon.png"),
+						packaging.resolve("windows/banner.bmp"),
+						packaging.resolve("windows/dialog.bmp"),
+						packaging.resolve("windows/icon.ico"),
+						packaging.resolve("macos/icon.icns")));
 		createAssets.execute();
 	}
 

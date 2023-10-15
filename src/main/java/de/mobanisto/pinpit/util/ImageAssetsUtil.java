@@ -100,14 +100,16 @@ public class ImageAssetsUtil
 		return svgFile;
 	}
 
-	public static void convertToPng(Path pathSvg, int size)
+	public static void convertToPng(Path pathSvg, int size, Path pathPng)
 			throws IOException, TranscoderException
 	{
-		String filename = pathSvg.getFileName().toString();
-		String basename = filename.substring(0, filename.length() - 4);
+		if (pathPng == null) {
+			String filename = pathSvg.getFileName().toString();
+			String basename = filename.substring(0, filename.length() - 4);
+			pathPng = pathSvg
+					.resolveSibling(String.format("%s-%d.png", basename, size));
+		}
 
-		Path pathPng = pathSvg
-				.resolveSibling(String.format("%s-%d.png", basename, size));
 		try (InputStream is = Files.newInputStream(pathSvg)) {
 			byte[] imageBytes = BatikUtil.convertSvgToPng(is, (float) size,
 					(float) size);
@@ -116,11 +118,14 @@ public class ImageAssetsUtil
 		}
 	}
 
-	public static void convertToIco(Path pathSvg)
+	public static void convertToIco(Path pathSvg, Path pathIco)
 			throws IOException, TranscoderException
 	{
-		String filename = pathSvg.getFileName().toString();
-		String basename = filename.substring(0, filename.length() - 4);
+		if (pathIco == null) {
+			String filename = pathSvg.getFileName().toString();
+			String basename = filename.substring(0, filename.length() - 4);
+			pathIco = pathSvg.resolveSibling(basename + ".ico");
+		}
 
 		List<BufferedImage> images = new ArrayList<>();
 		for (int size : new int[] { 16, 32, 48, 256 }) {
@@ -132,17 +137,19 @@ public class ImageAssetsUtil
 			}
 		}
 
-		Path pathIco = pathSvg.resolveSibling(basename + ".ico");
 		boolean[] compress = new boolean[] { false, false, false, true };
 		ICOEncoder.write(images, compress, pathIco.toFile());
 	}
 
-	public static void convertToBmp(Path pathSvg)
+	public static void convertToBmp(Path pathSvg, Path pathBmp)
 			throws IOException, TranscoderException
 	{
-		String filename = pathSvg.getFileName().toString();
-		String bmp = filename.substring(0, filename.length() - 4) + ".bmp";
-		Path pathBmp = pathSvg.resolveSibling(bmp);
+		if (pathBmp == null) {
+			String filename = pathSvg.getFileName().toString();
+			String bmp = filename.substring(0, filename.length() - 4) + ".bmp";
+			pathBmp = pathSvg.resolveSibling(bmp);
+		}
+
 		try (InputStream is = Files.newInputStream(pathSvg)) {
 			byte[] imageBytes = BatikUtil.convertSvgToPng(is);
 			BufferedImage image = ImageIO
@@ -151,19 +158,21 @@ public class ImageAssetsUtil
 		}
 	}
 
-	public static void convertToIcns(Path pathSvg)
+	public static void convertToIcns(Path pathSvg, Path pathIcns)
 			throws IOException, TranscoderException
 	{
 		String filename = pathSvg.getFileName().toString();
 		String basename = filename.substring(0, filename.length() - 4);
 
-		convertToIcns(pathSvg, basename);
+		convertToIcns(pathSvg, basename, pathIcns);
 	}
 
-	public static void convertToIcns(Path pathSvg, String basename)
-			throws IOException, TranscoderException
+	public static void convertToIcns(Path pathSvg, String basename,
+			Path pathIcns) throws IOException, TranscoderException
 	{
-		Path pathIcns = pathSvg.resolveSibling(basename + ".icns");
+		if (pathIcns == null) {
+			pathIcns = pathSvg.resolveSibling(basename + ".icns");
+		}
 
 		Map<Integer, byte[]> images = new HashMap<>();
 
