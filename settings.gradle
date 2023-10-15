@@ -10,3 +10,8 @@ pluginManagement {
 }
 
 rootProject.name = pName
+
+// Change the default exclude patterns, otherwise Gradle won't package
+// the .gitignore files for the template projects.
+import org.apache.tools.ant.DirectoryScanner
+DirectoryScanner.removeDefaultExclude('**/.gitignore')

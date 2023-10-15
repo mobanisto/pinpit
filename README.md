@@ -39,3 +39,13 @@ Colors can be specified using hex notation such as 0xaaff22 or by name as
 one of the web colors: white, silver, gray, black, red, maroon, yellow,
 olive, lime, green, aqua, teal, blue, navy, fuchsia, purple
 ```
+
+The `create-project-compose-for-desktop` tool can be used for creating
+a compose for desktop project that gives you a quick start for developing
+a new app:
+
+```
+./scripts/pinpit create-project-compose-for-desktop \
+    --output foo --project-name "Foo Tool" --package "com.foo.tool" \
+    --input src/test/resources/rocket.svg
+```

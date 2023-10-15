@@ -43,10 +43,10 @@ dependencies {
     implementation 'de.topobyte:ico4j:0.1.0'
     implementation 'com.github.gino0631:icns-core:1.2'
     implementation 'ar.com.hjg:pngj:2.1.0'
+    implementation 'commons-io:commons-io:2.14.0'
     implementation 'org.slf4j:slf4j-api:2.0.9'
     runtimeOnly 'ch.qos.logback:logback-classic:1.4.11'
     testImplementation 'de.topobyte:system-utils:0.0.1'
-    testImplementation 'commons-io:commons-io:2.14.0'
 }
 
 task copyJars(type: Copy) {
