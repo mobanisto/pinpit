@@ -5,10 +5,11 @@ This tool can be used for setting up projects that use the
 
 ## Usage
 
-The `create-image-assets` tool can be used for creating all the images assets
-required for packaging a desktop application. It creates the assets from a
-Material icon specified as input. The logo contains a rounded rectangle in a
-background color and the icon on top with the foreground color.
+The `create-image-assets-from-material-icon` tool can be used for creating
+all the images assets required for packaging a desktop application.
+It creates the assets from a Material icon specified as input.
+The logo contains a rounded rectangle in a background color and the icon
+on top with the foreground color.
 
 Call the tool like this:
 
