@@ -1,4 +1,12 @@
-# Pinpit
+# pinpit - Platform Independent Native Packaging and Installer Toolkit
+
+pinpit is the **P**latform **I**ndependent **N**ative **P**ackaging and
+**I**nstaller **T**oolkit.
+It helps you distribute JVM applications to users of the operating systems
+Linux, Windows and macOS without the need to run the build on machines
+with the respective operating systems installed.
+This makes it possible to build your packages and installers on a plain
+old Linux box and also on a CI machine.
 
 This tool can be used for setting up and modifying projects that use the
 [Pinpit Gradle Plugin](https://github.com/mobanisto/pinpit-gradle-plugin).
