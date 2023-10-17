@@ -1,0 +1,7 @@
+#!/bin/bash
+
+DIR=$(dirname $0)
+CMD="$DIR/pinpit.sh"
+CLASS="de.mobanisto.pinpit.RunUpdateTemplateProjects"
+
+exec "$CMD" "$CLASS" "$@"

@@ -3,10 +3,7 @@
 Update template project in resources:
 
 ```
-rm -rf src/main/resources/templates/compose-desktop
-cp -a templates/compose-desktop src/main/resources/templates/
-rm -rf src/main/resources/templates/swing
-cp -a templates/swing src/main/resources/templates/
+./scripts/pinpit-update-template-projects
 ```
 
 Update list of files for template project:
