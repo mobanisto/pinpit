@@ -11,13 +11,12 @@ import com.google.common.base.Splitter;
 
 import de.mobanisto.pinpit.PackageDefinition;
 
-public class CreateProjectComposeForDesktop extends AbstractCreateProject
+public class CreateProjectSwing extends AbstractCreateProject
 {
 
-	public CreateProjectComposeForDesktop(Path output,
-			PackageDefinition targetPackage, String fullVendorName,
-			String shortVendorName, List<String> nameParts,
-			String projectDescription)
+	public CreateProjectSwing(Path output, PackageDefinition targetPackage,
+			String fullVendorName, String shortVendorName,
+			List<String> nameParts, String projectDescription)
 	{
 		super(output, targetPackage, fullVendorName, shortVendorName, nameParts,
 				projectDescription);
@@ -25,7 +24,7 @@ public class CreateProjectComposeForDesktop extends AbstractCreateProject
 
 	public void execute() throws IOException
 	{
-		String files = resourceAsString("templates/compose-desktop.files");
+		String files = resourceAsString("templates/swing.files");
 		Iterable<String> lines = Splitter.onPattern("\r?\n").trimResults()
 				.omitEmptyStrings().split(files);
 		for (String filePath : lines) {
@@ -41,7 +40,7 @@ public class CreateProjectComposeForDesktop extends AbstractCreateProject
 		Path path = Paths.get(filePath);
 		String filename = path.getFileName().toString();
 
-		// strip 'templates/compose-for-desktop' prefix
+		// strip 'templates/swing' prefix
 		Path withoutPrefix = path.subpath(2, path.getNameCount());
 		boolean isSourceFile = false;
 		if (withoutPrefix.getNameCount() > 1) {
@@ -57,27 +56,26 @@ public class CreateProjectComposeForDesktop extends AbstractCreateProject
 				|| filename.endsWith(".jar")) {
 			copy(filePath, withoutPrefix);
 		} else if (isSourceFile) {
-			// This is something like 'desktop/src/main/kotlin'
+			// This is something like 'src/main/java'
 			Path upToPackage = withoutPrefix.subpath(0,
 					withoutPrefix.getNameCount() - sourcePrefix.getNameCount()
 							- 1);
-			if (filename.equals(mainClass + ".kt")) {
-				filename = replacements.get(mainClass) + ".kt";
-			} else if (filename.equals("Test" + mainClass + ".kt")) {
-				filename = "Test" + replacements.get(mainClass) + ".kt";
+			if (filename.equals(mainClass + ".java")) {
+				filename = replacements.get(mainClass) + ".java";
+			} else if (filename.equals("Test" + mainClass + ".java")) {
+				filename = "Test" + replacements.get(mainClass) + ".java";
 			}
 			Path relocatedFile = upToPackage.resolve(relocatedSource)
 					.resolve(filename);
-			edit(filePath, relocatedFile, this::editSourceFile);
+			edit(filePath + "x", relocatedFile, this::editSourceFile);
 		} else if (withoutPrefix.equals(Paths.get("gradlew"))) {
 			Path target = copy(filePath, withoutPrefix);
 			// make Gradle wrapper executable
 			if (withoutPrefix.equals(Paths.get("gradlew"))) {
 				target.toFile().setExecutable(true);
 			}
-		} else if (withoutPrefix
-				.equals(Paths.get("desktop/build.gradle.kts"))) {
-			edit(filePath, withoutPrefix, this::editBuildGradleKotlin);
+		} else if (withoutPrefix.equals(Paths.get("build.gradle"))) {
+			edit(filePath, withoutPrefix, this::editBuildGradleJava);
 		} else if (filename.equals("logback.xml")
 				|| filename.equals("logback-test.xml")) {
 			edit(filePath, withoutPrefix, this::editLogback);

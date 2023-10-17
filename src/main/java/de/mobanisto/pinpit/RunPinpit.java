@@ -23,6 +23,9 @@ public class RunPinpit
 			options.addCommand("create-project-compose-for-desktop",
 					RunCreateProjectComposeForDesktop.OPTIONS_FACTORY,
 					RunCreateProjectComposeForDesktop.class);
+			options.addCommand("create-project-swing",
+					RunCreateProjectSwing.OPTIONS_FACTORY,
+					RunCreateProjectSwing.class);
 
 			return options;
 		}
