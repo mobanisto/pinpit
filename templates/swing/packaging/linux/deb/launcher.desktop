@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Template Project
+Comment=Template Project - a template project
+Exec=/opt/template-project/bin/TemplateProject
+Icon=/opt/template-project/lib/TemplateProject.png
+Terminal=false
+Type=Application
+Categories=System;Utility
+MimeType=

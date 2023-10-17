@@ -1,0 +1,144 @@
+buildscript {
+    repositories {
+        maven { url 'https://mvn.topobyte.de' }
+    }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id 'de.mobanisto.pinpit'
+}
+
+wrapper {
+    gradleVersion = '7.6.3'
+}
+
+apply plugin: 'application'
+apply plugin: 'eclipse'
+
+version = pVersion
+
+mainClassName = 'com.example.template.TemplateProject'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    maven {
+        url 'https://mvn.topobyte.de'
+    }
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'de.topobyte:shared-preferences:0.1.0'
+    implementation 'de.topobyte:swing-utils:0.0.13'
+    testImplementation("junit:junit:4.13.2")
+}
+
+configurations {
+    currentOs {
+        extendsFrom implementation
+    }
+    windowsX64 {
+        extendsFrom implementation
+    }
+    linuxX64 {
+        extendsFrom implementation
+    }
+    linuxArm64 {
+        extendsFrom implementation
+    }
+    macosX64 {
+        extendsFrom implementation
+    }
+    macosArm64 {
+        extendsFrom implementation
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            compileClasspath = configurations.currentOs
+            runtimeClasspath = configurations.currentOs
+        }
+    }
+}
+
+ext.versionCode = "1.0.0"
+
+pinpit.desktop {
+    application {
+        mainClass = mainClassName
+        nativeDistributions {
+            jvmVendor = "adoptium"
+            jvmVersion = "17.0.8.1+1"
+
+            packageName = "Template Project"
+            packageVersion = versionCode
+            description = "Template Project - a template project"
+            vendor = "Template Vendor"
+            copyright = "2023 Template Vendor"
+            licenseFile.set(project.file("src/main/packaging/LICENSE.txt"))
+
+            linux {
+                packageName = "template-project"
+                debMaintainer = "jon@example.com"
+                debPackageVersion = versionCode
+                appCategory = "utils"
+                menuGroup = "Utility"
+                iconFile.set(project.file("src/main/packaging/linux/icon.png"))
+                debPreInst.set(project.file("src/main/packaging/linux/deb/preinst"))
+                debPostInst.set(project.file("src/main/packaging/linux/deb/postinst"))
+                debPreRm.set(project.file("src/main/packaging/linux/deb/prerm"))
+                debCopyright.set(project.file("src/main/packaging/linux/deb/copyright"))
+                debLauncher.set(project.file("src/main/packaging/linux/deb/launcher.desktop"))
+                deb("UbuntuFocalX64") {
+                    qualifier = "ubuntu-20.04"
+                    arch = "x64"
+                    depends(
+                        "libc6", "libexpat1", "libgcc-s1", "libpcre3", "libuuid1", "xdg-utils",
+                        "zlib1g", "libnotify4"
+                    )
+                }
+                distributableArchive {
+                    format = "tar.gz"
+                    arch = "x64"
+                }
+            }
+            windows {
+                dirChooser = true
+                shortcut = true
+                menuGroup = "Template Vendor"
+                upgradeUuid = "1889DD1C-CD5F-4B43-AC0E-880EC17D5593"
+                packageVersion = versionCode
+                iconFile.set(project.file("src/main/packaging/windows/icon.ico"))
+                aumid = "Vendor.Template.Project"
+                msi {
+                    arch = "x64"
+                    bitmapBanner.set(project.file("src/main/packaging/windows/banner.bmp"))
+                    bitmapDialog.set(project.file("src/main/packaging/windows/dialog.bmp"))
+                }
+                distributableArchive {
+                    format = "zip"
+                    arch = "x64"
+                }
+            }
+            macOS {
+                packageName = "Template Project"
+                iconFile.set(project.file("src/main/packaging/macos/icon.icns"))
+                bundleID = "com.example.template.project"
+                appCategory = "public.app-category.productivity"
+                distributableArchive {
+                    format = "zip"
+                    arch = "x64"
+                }
+                distributableArchive {
+                    format = "zip"
+                    arch = "arm64"
+                }
+            }
+        }
+    }
+}
