@@ -63,8 +63,8 @@ configurations {
 sourceSets {
     main {
         java {
-            compileClasspath = configurations.currentOs
-            runtimeClasspath = configurations.currentOs
+            compileClasspath += configurations.currentOs
+            runtimeClasspath += configurations.currentOs
         }
     }
 }
