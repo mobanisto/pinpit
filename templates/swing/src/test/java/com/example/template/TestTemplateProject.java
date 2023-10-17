@@ -27,7 +27,8 @@ public class TestTemplateProject {
             // ignore, continue without icon
         }
 
-        frame.add(new MainPanel());
+        String version = Version.getVersion();
+        frame.add(new MainPanel(version));
 
         frame.setTitle("Template Project");
         frame.setMinimumSize(new Dimension((int) (800 * factor), (int) (600 * factor)));

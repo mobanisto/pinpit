@@ -12,7 +12,7 @@ import java.io.InputStream;
 
 public class TemplateProject {
 
-    public static void main(String[] oArgs) {
+    public static void main(String[] args) {
         double factor =  1;
         if (SharedPreferences.isUIScalePresent()) {
             SwingUtils.setUiScale(SharedPreferences.getUIScale());
@@ -27,7 +27,8 @@ public class TemplateProject {
             // ignore, continue without icon
         }
 
-        frame.add(new MainPanel());
+        String version = Version.getVersion();
+        frame.add(new MainPanel(version));
 
         frame.setTitle("Template Project");
         frame.setMinimumSize(new Dimension((int) (800 * factor), (int) (600 * factor)));
