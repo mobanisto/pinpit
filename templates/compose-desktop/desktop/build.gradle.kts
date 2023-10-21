@@ -127,7 +127,6 @@ pinpit.desktop {
                 }
             }
             macOS {
-                packageName = "Template Project"
                 iconFile.set(project.file("src/main/packaging/macos/icon.icns"))
                 bundleID = "com.example.template.project"
                 appCategory = "public.app-category.productivity"
