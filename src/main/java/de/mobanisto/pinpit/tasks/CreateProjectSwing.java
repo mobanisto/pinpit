@@ -1,13 +1,9 @@
 package de.mobanisto.pinpit.tasks;
 
-import static de.mobanisto.pinpit.util.ResourceUtil.resourceAsString;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-
-import com.google.common.base.Splitter;
 
 import de.mobanisto.pinpit.PackageDefinition;
 
@@ -18,21 +14,12 @@ public class CreateProjectSwing extends AbstractCreateProject
 			String fullVendorName, String shortVendorName,
 			List<String> nameParts, String projectDescription)
 	{
-		super(output, targetPackage, fullVendorName, shortVendorName, nameParts,
-				projectDescription);
+		super(output, "templates/swing.files", targetPackage, fullVendorName,
+				shortVendorName, nameParts, projectDescription);
 	}
 
-	public void execute() throws IOException
-	{
-		String files = resourceAsString("templates/swing.files");
-		Iterable<String> lines = Splitter.onPattern("\r?\n").trimResults()
-				.omitEmptyStrings().split(files);
-		for (String filePath : lines) {
-			copyOrEdit(filePath);
-		}
-	}
-
-	private void copyOrEdit(String filePath) throws IOException
+	@Override
+	protected void copyOrEdit(String filePath) throws IOException
 	{
 		Path sourcePrefix = templatePackage.directory();
 		Path relocatedSource = targetPackage.directory();

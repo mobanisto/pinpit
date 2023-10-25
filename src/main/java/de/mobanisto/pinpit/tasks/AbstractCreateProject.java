@@ -1,6 +1,7 @@
 package de.mobanisto.pinpit.tasks;
 
 import static de.mobanisto.pinpit.util.ResourceUtil.resourceAsStream;
+import static de.mobanisto.pinpit.util.ResourceUtil.resourceAsString;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,13 +20,15 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.IOUtils;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 
 import de.mobanisto.pinpit.PackageDefinition;
 
-public class AbstractCreateProject
+public abstract class AbstractCreateProject
 {
 
 	protected Path output;
+	protected String resourcesFiles;
 	protected PackageDefinition targetPackage;
 
 	protected PackageDefinition templatePackage = new PackageDefinition(
@@ -34,11 +37,13 @@ public class AbstractCreateProject
 	protected String mainClass = "TemplateProject";
 	protected Map<String, String> replacements = new HashMap<>();
 
-	public AbstractCreateProject(Path output, PackageDefinition targetPackage,
-			String fullVendorName, String shortVendorName,
-			List<String> nameParts, String projectDescription)
+	public AbstractCreateProject(Path output, String resourcesFiles,
+			PackageDefinition targetPackage, String fullVendorName,
+			String shortVendorName, List<String> nameParts,
+			String projectDescription)
 	{
 		this.output = output;
+		this.resourcesFiles = resourcesFiles;
 		this.targetPackage = targetPackage;
 
 		List<String> lowerParts = nameParts.stream().map(String::toLowerCase)
@@ -58,6 +63,18 @@ public class AbstractCreateProject
 		replacements.put("com.example.template.project",
 				targetPackage.dots() + "." + Joiner.on(".").join(lowerParts));
 	}
+
+	public void execute() throws IOException
+	{
+		String files = resourceAsString(resourcesFiles);
+		Iterable<String> lines = Splitter.onPattern("\r?\n").trimResults()
+				.omitEmptyStrings().split(files);
+		for (String filePath : lines) {
+			copyOrEdit(filePath);
+		}
+	}
+
+	protected abstract void copyOrEdit(String filePath) throws IOException;
 
 	protected String editBuildGradleKotlin(String content)
 	{
