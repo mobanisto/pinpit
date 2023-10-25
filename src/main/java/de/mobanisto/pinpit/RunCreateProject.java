@@ -26,9 +26,10 @@ import de.topobyte.utilities.apache.commons.cli.commands.options.CommonsCliExeOp
 import de.topobyte.utilities.apache.commons.cli.commands.options.ExeOptions;
 import de.topobyte.utilities.apache.commons.cli.commands.options.ExeOptionsFactory;
 
-public class RunCreateProjectSwing
+public class RunCreateProject
 {
 
+	private static final String OPTION_TEMPLATE = "template";
 	private static final String OPTION_OUTPUT = "output";
 	private static final String OPTION_PROJECT_NAME = "project-name";
 	private static final String OPTION_PROJECT_DESCRIPTION = "description";
@@ -44,6 +45,7 @@ public class RunCreateProjectSwing
 			Options options = new Options();
 			// @formatter:off
 			OptionHelper.addL(options, OPTION_OUTPUT, true, true, "directory", "output directory to create project in");
+			OptionHelper.addL(options, OPTION_TEMPLATE, true, true, "string", "a template. Possible values: " + ProjectTemplate.listOfNames());
 			OptionHelper.addL(options, OPTION_PROJECT_NAME, true, true, "string", "name of the project such as 'Test Project' (camel case, parts seperated by space)");
 			OptionHelper.addL(options, OPTION_PROJECT_DESCRIPTION, true, true, "string", "a short project description");
 			OptionHelper.addL(options, OPTION_PACKAGE, true, true, "string", "package name such as 'com.example.project.name'");
@@ -88,12 +90,21 @@ public class RunCreateProjectSwing
 			return;
 		}
 		Path output = Paths.get(line.getOptionValue(OPTION_OUTPUT));
+		String templateName = line.getOptionValue(OPTION_TEMPLATE);
 		String projectName = line.getOptionValue(OPTION_PROJECT_NAME);
 		String projectDescription = line
 				.getOptionValue(OPTION_PROJECT_DESCRIPTION);
 		String packageName = line.getOptionValue(OPTION_PACKAGE);
 		String vendorFull = line.getOptionValue(OPTION_VENDOR_FULL);
 		String vendorShort = line.getOptionValue(OPTION_VENDOR_SHORT);
+
+		ProjectTemplate template = ProjectTemplate.byName(templateName);
+		if (template == null) {
+			System.out.println(String.format(
+					"Error: Invalid template name. Please specify one of these: %s",
+					ProjectTemplate.listOfNames()));
+			System.exit(1);
+		}
 
 		List<String> nameParts = Splitter.on(" ").omitEmptyStrings()
 				.splitToList(projectName);
@@ -124,12 +135,12 @@ public class RunCreateProjectSwing
 			}
 		}
 
-		CreateProject createProject = ProjectTemplate.creationTask(
-				ProjectTemplate.SWING, output, targetPackage, vendorFull,
-				vendorShort, nameParts, projectDescription);
+		CreateProject createProject = ProjectTemplate.creationTask(template,
+				output, targetPackage, vendorFull, vendorShort, nameParts,
+				projectDescription);
 		createProject.execute();
 
-		Path srcMain = output.resolve("src/main");
+		Path srcMain = output.resolve(template.getPathSrcMain());
 		Path packaging = srcMain.resolve("packaging");
 
 		CreateImageAssetsFromMaterialIcon createAssets = new CreateImageAssetsFromMaterialIcon(

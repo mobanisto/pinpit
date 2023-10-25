@@ -31,7 +31,7 @@ jobs:
       run: ./gradlew createRuntime
     - name: Create C4D project and package
       run: >
-        ./scripts/pinpit create-project-compose-for-desktop \
+        ./scripts/pinpit create-project --template compose-for-desktop \
           --output test-c4d --project-name "Foo Tool" --package "com.foo.tool" \
           --description "a tool for doing fancy stuff" \
           --vendor-full "Bar Inc" --vendor-short "Bar" \
@@ -39,7 +39,7 @@ jobs:
           cd test-c4d && ./gradlew pinpitPackageDefault
     - name: Create Swing project and package
       run: >
-        ./scripts/pinpit create-project-swing \
+        ./scripts/pinpit create-project --template swing \
           --output test-swing --project-name "Foo Tool" --package "com.foo.tool" \
           --description "a tool for doing fancy stuff" \
           --vendor-full "Bar Inc" --vendor-short "Bar" \

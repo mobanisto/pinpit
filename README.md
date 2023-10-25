@@ -30,8 +30,7 @@ The tool can be run like this:
 The following commands are available:
 
 * `create-image-assets-from-material-icon`
-* `create-project-compose-for-desktop`
-* `create-project-swing`
+* `create-project`
 
 ### Creating image assets
 
@@ -70,14 +69,25 @@ one of the web colors: white, silver, gray, black, red, maroon, yellow,
 olive, lime, green, aqua, teal, blue, navy, fuchsia, purple
 ```
 
-### Creating a Compose for Desktop project
+### Creating a project
 
-The `create-project-compose-for-desktop` tool can be used for creating
-a compose for desktop project that gives you a quick start for developing
-a new app:
+The `create-project` tool can be used for creating a project from a template
+that gives you a quick start for developing a new app.
+
+To create a Compose for Desktop app, use this:
 
 ```
-./scripts/pinpit create-project-compose-for-desktop \
+./scripts/pinpit create-project --template compose-for-desktop \
+    --output project --project-name "Foo Tool" --package "com.foo.tool" \
+    --description "a tool for doing fancy stuff" \
+    --vendor-full "Bar Inc" --vendor-short "Bar" \
+    --input src/test/resources/rocket.svg
+```
+
+To create a Swing app, use this:
+
+```
+./scripts/pinpit create-project --template swing \
     --output project --project-name "Foo Tool" --package "com.foo.tool" \
     --description "a tool for doing fancy stuff" \
     --vendor-full "Bar Inc" --vendor-short "Bar" \
@@ -87,8 +97,10 @@ a new app:
 This is the detailed help message of the tool:
 
 ```
-usage: pinpit create-project-compose-for-desktop [options]
+usage: pinpit create-project [options]
     --output <directory>         output directory to create project in
+    --template <string>          a template. Possible values: 'swing',
+                                 'compose-for-desktop'
     --project-name <string>      name of the project such as 'Test
                                  Project' (camel case, parts seperated by
                                  space)
@@ -110,44 +122,6 @@ usage: pinpit create-project-compose-for-desktop [options]
 Colors can be specified using hex notation such as 0xaaff22 or by name as
 one of the web colors: white, silver, gray, black, red, maroon, yellow,
 olive, lime, green, aqua, teal, blue, navy, fuchsia, purple
-```
-
-### Creating a Swing project
-
-The `create-project-swing` tool can be used for creating
-a Swing project that gives you a quick start for developing
-a new app:
-
-```
-./scripts/pinpit create-project-swing \
-    --output project --project-name "Foo Tool" --package "com.foo.tool" \
-    --description "a tool for doing fancy stuff" \
-    --vendor-full "Bar Inc" --vendor-short "Bar" \
-    --input src/test/resources/rocket.svg
-```
-
-This is the detailed help message of the tool:
-
-```
-usage: pinpit create-project-swing [options]
-    --output <directory>         output directory to create project in
-    --project-name <string>      name of the project such as 'Test
-                                 Project' (camel case, parts seperated by
-                                 space)
-    --description <string>       a short project description
-    --package <string>           package name such as
-                                 'com.example.project.name'
-    --vendor-full <string>       full vendor name such as 'Yoyodyne Inc'
-    --vendor-short <string>      short vendor name such as 'Yoyodyne'
-    --input <file>               Material icon SVG input file
-    --color-background <color>   background color for the icon
-    --color-foreground <color>   color for tinting the Material icon
-    --color-dialog <color>       background used in the Windows installer
-                                 dialog
-    --size-rect <double>         fraction of the image size for the
-                                 rectangle (0..1), default: 0.9
-    --size-symbol <double>       fraction of the image size for the symbol
-                                 (0..1), default: 0.8
 
 Colors can be specified using hex notation such as 0xaaff22 or by name as
 one of the web colors: white, silver, gray, black, red, maroon, yellow,

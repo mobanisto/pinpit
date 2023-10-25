@@ -20,12 +20,8 @@ public class RunPinpit
 			options.addCommand("create-image-assets-from-material-icon",
 					RunCreateImageAssetsFromMaterialIcon.OPTIONS_FACTORY,
 					RunCreateImageAssetsFromMaterialIcon.class);
-			options.addCommand("create-project-compose-for-desktop",
-					RunCreateProjectComposeForDesktop.OPTIONS_FACTORY,
-					RunCreateProjectComposeForDesktop.class);
-			options.addCommand("create-project-swing",
-					RunCreateProjectSwing.OPTIONS_FACTORY,
-					RunCreateProjectSwing.class);
+			options.addCommand("create-project",
+					RunCreateProject.OPTIONS_FACTORY, RunCreateProject.class);
 
 			return options;
 		}
