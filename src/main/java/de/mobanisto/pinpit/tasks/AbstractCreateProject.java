@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +28,16 @@ import de.mobanisto.pinpit.PackageDefinition;
 public abstract class AbstractCreateProject
 {
 
+	enum SourceLanguage {
+		KOTLIN,
+		JAVA
+	}
+
 	protected Path output;
 	protected String resourcesFiles;
+	protected String sourceFilesSuffix;
+	protected String mainClassExtension;
+	protected String pathBuildfile;
 	protected PackageDefinition targetPackage;
 
 	protected PackageDefinition templatePackage = new PackageDefinition(
@@ -36,14 +45,18 @@ public abstract class AbstractCreateProject
 
 	protected String mainClass = "TemplateProject";
 	protected Map<String, String> replacements = new HashMap<>();
+	private SourceLanguage sourceLanguage;
 
 	public AbstractCreateProject(Path output, String resourcesFiles,
+			SourceLanguage sourceLanguage, String pathBuildfile,
 			PackageDefinition targetPackage, String fullVendorName,
 			String shortVendorName, List<String> nameParts,
 			String projectDescription)
 	{
 		this.output = output;
 		this.resourcesFiles = resourcesFiles;
+		this.sourceLanguage = sourceLanguage;
+		this.pathBuildfile = pathBuildfile;
 		this.targetPackage = targetPackage;
 
 		List<String> lowerParts = nameParts.stream().map(String::toLowerCase)
@@ -66,6 +79,14 @@ public abstract class AbstractCreateProject
 
 	public void execute() throws IOException
 	{
+		if (sourceLanguage == SourceLanguage.JAVA) {
+			sourceFilesSuffix = "x";
+			mainClassExtension = ".java";
+		} else if (sourceLanguage == SourceLanguage.KOTLIN) {
+			sourceFilesSuffix = null;
+			mainClassExtension = ".kt";
+		}
+
 		String files = resourceAsString(resourcesFiles);
 		Iterable<String> lines = Splitter.onPattern("\r?\n").trimResults()
 				.omitEmptyStrings().split(files);
@@ -74,7 +95,65 @@ public abstract class AbstractCreateProject
 		}
 	}
 
-	protected abstract void copyOrEdit(String filePath) throws IOException;
+	protected void copyOrEdit(String filePath) throws IOException
+	{
+		Path sourcePrefix = templatePackage.directory();
+		Path relocatedSource = targetPackage.directory();
+
+		Path path = Paths.get(filePath);
+		String filename = path.getFileName().toString();
+
+		// strip 'templates/<template name>' prefix
+		Path withoutPrefix = path.subpath(2, path.getNameCount());
+		boolean isSourceFile = false;
+		if (withoutPrefix.getNameCount() > 1) {
+			Path dirWithoutPrefix = withoutPrefix.subpath(0,
+					withoutPrefix.getNameCount() - 1);
+			if (dirWithoutPrefix.endsWith(sourcePrefix)) {
+				isSourceFile = true;
+			}
+		}
+
+		if (filename.endsWith(".bmp") || filename.endsWith(".png")
+				|| filename.endsWith(".ico") || filename.endsWith(".icns")
+				|| filename.endsWith(".jar")) {
+			copy(filePath, withoutPrefix);
+		} else if (isSourceFile) {
+			// This is something like 'src/main/java' or
+			// 'desktop/src/main/kotlin'
+			Path upToPackage = withoutPrefix.subpath(0,
+					withoutPrefix.getNameCount() - sourcePrefix.getNameCount()
+							- 1);
+			if (filename.equals(mainClass + mainClassExtension)) {
+				filename = replacements.get(mainClass) + mainClassExtension;
+			} else if (filename
+					.equals("Test" + mainClass + mainClassExtension)) {
+				filename = "Test" + replacements.get(mainClass)
+						+ mainClassExtension;
+			}
+			Path relocatedFile = upToPackage.resolve(relocatedSource)
+					.resolve(filename);
+			String suffix = sourceFilesSuffix != null ? sourceFilesSuffix : "";
+			edit(filePath + suffix, relocatedFile, this::editSourceFile);
+		} else if (withoutPrefix.equals(Paths.get("gradlew"))) {
+			Path target = copy(filePath, withoutPrefix);
+			// make Gradle wrapper executable
+			if (withoutPrefix.equals(Paths.get("gradlew"))) {
+				target.toFile().setExecutable(true);
+			}
+		} else if (withoutPrefix.equals(Paths.get(pathBuildfile))) {
+			if (sourceLanguage == SourceLanguage.JAVA) {
+				edit(filePath, withoutPrefix, this::editBuildGradleJava);
+			} else if (sourceLanguage == SourceLanguage.KOTLIN) {
+				edit(filePath, withoutPrefix, this::editBuildGradleKotlin);
+			}
+		} else if (filename.equals("logback.xml")
+				|| filename.equals("logback-test.xml")) {
+			edit(filePath, withoutPrefix, this::editLogback);
+		} else {
+			edit(filePath, withoutPrefix, this::editTextFile);
+		}
+	}
 
 	protected String editBuildGradleKotlin(String content)
 	{
