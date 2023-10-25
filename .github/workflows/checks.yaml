@@ -37,3 +37,11 @@ jobs:
           --vendor-full "Bar Inc" --vendor-short "Bar" \
           --input src/test/resources/rocket.svg &&
           cd test-c4d && ./gradlew pinpitPackageDefault
+    - name: Create Swing project and package
+      run: >
+        ./scripts/pinpit create-project-swing \
+          --output test-swing --project-name "Foo Tool" --package "com.foo.tool" \
+          --description "a tool for doing fancy stuff" \
+          --vendor-full "Bar Inc" --vendor-short "Bar" \
+          --input src/test/resources/rocket.svg &&
+          cd test-swing && ./gradlew pinpitPackageDefault
