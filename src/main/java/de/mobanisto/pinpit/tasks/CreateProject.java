@@ -25,10 +25,10 @@ import com.google.common.base.Splitter;
 
 import de.mobanisto.pinpit.PackageDefinition;
 
-public abstract class AbstractCreateProject
+public class CreateProject
 {
 
-	enum SourceLanguage {
+	public static enum SourceLanguage {
 		KOTLIN,
 		JAVA
 	}
@@ -47,7 +47,7 @@ public abstract class AbstractCreateProject
 	protected Map<String, String> replacements = new HashMap<>();
 	private SourceLanguage sourceLanguage;
 
-	public AbstractCreateProject(Path output, String resourcesFiles,
+	public CreateProject(Path output, String resourcesFiles,
 			SourceLanguage sourceLanguage, String pathBuildfile,
 			PackageDefinition targetPackage, String fullVendorName,
 			String shortVendorName, List<String> nameParts,

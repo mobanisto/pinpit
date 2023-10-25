@@ -18,7 +18,7 @@ import com.google.common.base.Splitter;
 
 import de.mobanisto.pinpit.tasks.AbstractCreateImageAssets.OutputPaths;
 import de.mobanisto.pinpit.tasks.CreateImageAssetsFromMaterialIcon;
-import de.mobanisto.pinpit.tasks.CreateProjectComposeForDesktop;
+import de.mobanisto.pinpit.tasks.CreateProject;
 import de.mobanisto.pinpit.util.Keywords;
 import de.topobyte.utilities.apache.commons.cli.OptionHelper;
 import de.topobyte.utilities.apache.commons.cli.commands.args.CommonsCliArguments;
@@ -124,9 +124,9 @@ public class RunCreateProjectComposeForDesktop
 			}
 		}
 
-		CreateProjectComposeForDesktop createProject = new CreateProjectComposeForDesktop(
-				output, targetPackage, vendorFull, vendorShort, nameParts,
-				projectDescription);
+		CreateProject createProject = ProjectTemplate.creationTask(
+				ProjectTemplate.COMPOSE_FOR_DESKTOP, output, targetPackage,
+				vendorFull, vendorShort, nameParts, projectDescription);
 		createProject.execute();
 
 		Path srcMain = output.resolve("desktop/src/main");

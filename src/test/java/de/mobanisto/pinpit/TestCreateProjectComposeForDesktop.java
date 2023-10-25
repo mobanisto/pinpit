@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import org.apache.commons.io.file.PathUtils;
 
-import de.mobanisto.pinpit.tasks.CreateProjectComposeForDesktop;
+import de.mobanisto.pinpit.tasks.CreateProject;
 import de.topobyte.system.utils.SystemPaths;
 
 public class TestCreateProjectComposeForDesktop
@@ -25,9 +25,10 @@ public class TestCreateProjectComposeForDesktop
 		PackageDefinition targetPackage = new PackageDefinition(
 				Arrays.asList("de", "mobanisto"));
 
-		CreateProjectComposeForDesktop task = new CreateProjectComposeForDesktop(
-				output, targetPackage, "Yoyodyne Inc", "Yoyodyne",
-				Arrays.asList("Foo", "Bar"), "a fancy project");
+		CreateProject task = ProjectTemplate.creationTask(
+				ProjectTemplate.COMPOSE_FOR_DESKTOP, output, targetPackage,
+				"Yoyodyne Inc", "Yoyodyne", Arrays.asList("Foo", "Bar"),
+				"a fancy project");
 		task.execute();
 	}
 

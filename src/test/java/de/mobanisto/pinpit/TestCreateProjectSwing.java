@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import org.apache.commons.io.file.PathUtils;
 
-import de.mobanisto.pinpit.tasks.CreateProjectSwing;
+import de.mobanisto.pinpit.tasks.CreateProject;
 import de.topobyte.system.utils.SystemPaths;
 
 public class TestCreateProjectSwing
@@ -25,9 +25,9 @@ public class TestCreateProjectSwing
 		PackageDefinition targetPackage = new PackageDefinition(
 				Arrays.asList("de", "mobanisto"));
 
-		CreateProjectSwing task = new CreateProjectSwing(output, targetPackage,
-				"Yoyodyne Inc", "Yoyodyne", Arrays.asList("Foo", "Bar"),
-				"a fancy project");
+		CreateProject task = ProjectTemplate.creationTask(ProjectTemplate.SWING,
+				output, targetPackage, "Yoyodyne Inc", "Yoyodyne",
+				Arrays.asList("Foo", "Bar"), "a fancy project");
 		task.execute();
 	}
 
