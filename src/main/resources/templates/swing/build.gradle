@@ -69,8 +69,6 @@ sourceSets {
     }
 }
 
-ext.versionCode = "1.0.0"
-
 pinpit.desktop {
     application {
         mainClass = "com.example.template.TemplateProject"
@@ -79,7 +77,7 @@ pinpit.desktop {
             jvmVersion = "17.0.8.1+1"
 
             packageName = "Template Project"
-            packageVersion = versionCode
+            packageVersion = version
             description = "Template Project - a template project"
             vendor = "Template Vendor"
             copyright = "2023 Template Vendor"
@@ -88,7 +86,7 @@ pinpit.desktop {
             linux {
                 packageName = "template-project"
                 debMaintainer = "jon@example.com"
-                debPackageVersion = versionCode
+                debPackageVersion = version
                 appCategory = "utils"
                 menuGroup = "Utility"
                 iconFile.set(project.file("src/main/packaging/linux/icon.png"))
@@ -115,7 +113,7 @@ pinpit.desktop {
                 shortcut = true
                 menuGroup = "Template Vendor"
                 upgradeUuid = "1889DD1C-CD5F-4B43-AC0E-880EC17D5593"
-                packageVersion = versionCode
+                packageVersion = version
                 iconFile.set(project.file("src/main/packaging/windows/icon.ico"))
                 aumid = "Vendor.Template.Project"
                 msi {
