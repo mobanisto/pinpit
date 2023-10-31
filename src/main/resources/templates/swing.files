@@ -1,5 +1,4 @@
 templates/swing/build.gradle
-templates/swing/create-assets.sh
 templates/swing/.gitignore
 templates/swing/gradle.properties
 templates/swing/gradlew
